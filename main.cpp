@@ -2,43 +2,21 @@
 #include <vector>
 #include <algorithm>
 using namespace std;
-int d[10001];
-vector<int> coin;
+
+int d[31];
 
 int main() {
     cin.tie(0); cout.tie(0); ios::sync_with_stdio(false);
-
-    int n, k;
-    cin >> n >> k;
-
-    fill_n(d, 10001, 10001);
-    int num;
-
-    for(int i=0; i<n; i++){
-        cin >> num;
-        if(k>=num){
-            coin.push_back(num);
-            d[num] = 1;
-        }
-
-    }
-
-    sort(coin.begin(), coin.end());
-
-    for(int i=0; i<coin.size(); i++){
-        for(int j=coin[i]; j<=k; j++){
-            if(j%coin[i] == 0) d[j] = min(d[j], j/coin[i]);
-            else{
-                for(int l=1; l<=j/coin[i]; l++){
-                    d[j] = min(d[j], l + d[j - l*coin[i]]);
-                }
-
-            }
+    int n, result = 0;
+    cin >> n;
+    d[0] = 1;
+    if(n%2!=1){
+        d[2] = 3;
+        d[4] = d[2] * d[2] + 2;
+        for(int i=6; i<=n; i+=2){
+            d[i] = d[i-2] * 6 - d[i-4] * 9 + d[i-6] * 2;
         }
     }
-
-    int result = d[k];
-    if(result >= 10001) result = -1;
+    result = d[n];
     cout << result;
-    return 0;
 }
